@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Bella setup file
+
+source docs/help
+
+# Help text
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  run_help
+  exit
+fi
+
+# Test for known flags
+for opt in $@
+do
+  case $opt in
+    --dev-mode) dev_mode=true ;;  # Symlink files into place (default is copy)
+    --no-global) no_global=true ;; # Supress copying/syncing the example global file
+    -*|--*) printf "\nWarning: invalid option $opt\n" && run_help && exit ;;
+  esac
+done
+
+cd "$(dirname "${BASH_SOURCE}")"
+BELLA_DIR=$(pwd)
+
+INCLUDES_LIST=(bella docs/bella_global)
+
+[ ! -d "$HOME/.bin" ] && mkdir "$HOME/.bin"
+
+if [[ $dev_mode ]] ; then
+
+  ln -vfFs "${BELLA_DIR}/bella" "${HOME}/.bin/bella"
+  if [[ ! $no_global ]] ; then
+    ln -vfFs "${BELLA_DIR}/docs/bella_global" "${HOME}/.bella_global"
+  fi
+
+else
+
+  # If the file already exists, remove it
+  [ -h "${HOME}/.bin/bella" ] && rm "${HOME}/.bin/bella"
+  cp -f "${BELLA_DIR}/bella" "${HOME}/.bin/bella"
+
+  if [[ ! $no_global ]] ; then
+    # If the file already exists, remove it
+    [ -h "${HOME}/.bella_global" ] && rm "${HOME}/.bella_global"
+    cp -f "${BELLA_DIR}/docs/bella_global" "${HOME}/.bella_global"
+  fi
+
+fi
+
+if [[ $no_global ]] ; then
+  printf "\n! You'll need to create .bella_global in $HOME\n"
+fi
+
+unset copy_files

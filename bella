@@ -1,0 +1,193 @@
+#!/usr/bin/python
+
+# bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
+
+import sys, getopt, subprocess, os
+from subprocess import call
+from os.path import expanduser
+
+# print colors
+class Terminal :
+  def __init__(self): 
+    self.header = '\033[37m'
+    self.okblue = '\033[94m'
+    self.okay = '\033[32m'
+    self.warning = '\033[33m'
+    self.fail = '\033[31m'
+    self.end = '\033[m'
+  def missing_file(self, n, f) :
+    if n < 1 or n > 2 :
+      pass
+    if n == 1 :
+      print self.warning + "\n! Warning:",f, "not found" + self.end
+      pass
+    if n == 2 :
+      # Create a 'missing file' general warning
+      missing_file_error = self.fail + '\n! Error: No configuration files found\n' + self.header
+      missing_file_error += 'You must have at least one of the following:\n'
+      missing_file_error += '   - ' + global_file + '\n'
+      missing_file_error += '   - ' + local_file + self.end
+      print missing_file_error
+      sys.exit()
+  def u_error(self, e) :
+    print self.fail + "x Unexpected error:", str(e) + self.end
+    sys.exit()
+
+# Class for holding stored values
+# Initialized with some default settings
+class Bella :
+  def __init__(self): 
+    self.lineNumbers = False
+    self.environment = 'develop'
+    self.options = ''
+    self.addMinToFilename = False
+    self.addMaxToFilename = False
+  def hold(self, **entries): 
+    self.__dict__.update(entries)
+
+opts_dic = {}
+global_dic = {}
+local_dic = {}
+
+feedback = Terminal()
+stored = Bella()
+
+def capture_opts(argv) :
+  try:
+    opts, args = getopt.getopt(argv,"hi:o:e:s:",["input=","output=","environment=","style="])
+  except getopt.GetoptError :
+    print feedback.header + 'bella -i <inputfile> -o <outputfile> -e <environment> -s <style>' + feedback.end
+    sys.exit(2)
+  for opt, arg in opts:
+    if opt  in ("-h", "--help") :
+      print feedback.header + 'bella -i <inputfile> -o <outputfile> -e <environment> -s <style>' + feedback.end
+      sys.exit()
+    elif opt in ("-i", "--input") :
+      opts_dic.update({'watchFile': arg})
+    elif opt in ("-o", "--output") :
+      opts_dic.update({'processedFile': arg})
+    elif opt in ("-e", "--environment") :
+      opts_dic.update({'environment': arg})
+    elif opt in ("-s", "--style") :
+      opts_dic.update({'style': arg})
+
+if __name__ == "__main__" :
+  capture_opts(sys.argv[1:])
+
+home = expanduser("~")
+current = os.getcwd()
+
+global_file = os.path.join(home,'.bella_global')
+local_file = os.path.join(current,'bella.config')
+
+# Opens "bella_global
+try:
+  with open(global_file,'r') as g_inf :
+    global_dic = eval(g_inf.read())
+    g_inf.close()
+    # Add dictionary values to the stored class
+    if 'defaults' in global_dic :
+      stored.hold(**global_dic['defaults'])
+    if 'paths' in global_dic :
+      stored.hold(**global_dic['paths'])
+except IOError :
+  pass
+  
+# Opens "bella.config
+try:
+  with open(local_file,'r') as l_inf :
+    local_dic = eval(l_inf.read())
+    l_inf.close()
+    # Add dictionary values to the stored class
+    if 'defaults' in local_dic :
+        stored.hold(**local_dic['defaults'])
+    if 'paths' in local_dic :
+        stored.hold(**local_dic['paths'])
+except IOError :
+  pass
+
+# If both files are missing, print detailed message and quit
+# If only one of the files is missing, print a warning but continue
+if global_dic == {} and local_dic == {} :
+  feedback.missing_file(2, None)
+
+if global_dic == {} :
+  feedback.missing_file(1, global_file)
+elif local_dic == {} :
+  feedback.missing_file(1, local_file)
+
+# Grab the environment from the command lin options, if available
+if 'environment' in opts_dic :
+  stored.environment = opts_dic['environment']
+
+# Store the environment settings
+# The Bella class is initialized with the environment set to 'develop'
+if stored.environment == 'deploy' :
+  if 'deploy' in global_dic :
+    stored.hold(**global_dic['deploy'])
+  if 'deploy' in local_dic :
+    stored.hold(**local_dic['deploy'])
+else :
+  if 'develop' in global_dic :
+    stored.hold(**global_dic['develop'])
+  if 'develop' in local_dic :
+    stored.hold(**local_dic['develop'])
+
+# Store command line options if there are any
+if opts_dic != {} :
+  stored.hold(**opts_dic)
+
+# Test for required files
+try :
+  stored.sassPath
+  stored.watchFile
+  stored.cssPath
+except :
+  feedback.u_error(sys.exc_info()[1])
+
+# Set processedFile to watchFile if not already set
+try :
+  stored.processedFile
+except :
+  stored.processedFile = stored.watchFile
+
+# Append 'max' or 'min' to processed file, if applicable
+if stored.addMinToFilename and stored.style == 'compressed' :
+  stored.processedFile += '.min'
+if stored.addMaxToFilename and stored.style != 'compressed' :
+  stored.processedFile += '.max'
+
+# Add file extensions
+stored.watchFile += '.scss'
+stored.processedFile += '.css'
+
+try :
+  stored.style
+except :
+  stored.style = ' --style expanded'  
+else :
+  stored.options += ' --style ' + stored.style
+
+try :
+  stored.precision
+except :
+  pass  
+else :
+  stored.options += ' --precision ' + str(stored.precision)
+
+if stored.lineNumbers :
+  stored.options += ' --line-numbers'
+
+try :
+  # Create the Sass command
+  bella_do = '--watch ' + stored.sassPath + stored.watchFile + ':' + stored.cssPath + stored.processedFile + stored.options
+  print feedback.okay + '\n','sass ' + bella_do + '\n' + feedback.end
+except :
+  feedback.u_error(sys.exc_info()[1])
+
+# Run Sass
+# Ends when crtl-c is pressed
+try :
+  sass_cmd = call(['sass %s' % bella_do], shell=True)
+except KeyboardInterrupt :
+  sys.exit(0)
