@@ -26,7 +26,7 @@ Only **docs/bella\_global** and **bella** are copied/synced; **bella\_global** i
 
 ### Use
 
-Once in **~/.bin**, Bella can be run with the following optional arguments:
+Once in **~/.bin**, Bella can be run from the root of your site by typing ```bella```, or with the following optional arguments:
 
 ```python
 bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
@@ -37,7 +37,9 @@ bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
 - Using ```environment``` is a quick way to switch away from your default environment
 - ```style``` is one of the Sass style options
 
-Any command line arguments override local settings, which in turn override any global settings.
+Any command line arguments override local settings, which in turn override any global settings. If you've got your configuration files set right, you should only need the options when switching environments.
+
+Example: ```bella -e deploy```
 
 Example files included in this repo:
 
