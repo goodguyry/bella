@@ -9,13 +9,17 @@ A Python script to take the redundancy out of Sass. Contributions welcomed and a
 
 Clone the repo into the directory of your chosing and then ```cd``` into the project's root.
 
-```git clone https://github.com/goodguyry/bella.git && cd bella && source setup```
+```bash
+git clone https://github.com/goodguyry/bella.git && cd bella && source setup
+```
 
 #### Git-free
 
-Download the files into the directory of your chosing. Once it's done downloading, ```cd``` into the new directory.
+Download the files into the directory of your chosing.
 
-```curl -#L https://github.com/goodguyry/bella/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,LICENSE} && source setup```
+```bash
+curl -#L https://github.com/goodguyry/bella/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,LICENSE} && source setup
+```
 
 #### Setup Options
 
