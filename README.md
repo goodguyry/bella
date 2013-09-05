@@ -7,7 +7,7 @@ A Python script to take the redundancy out of Sass. Contributions welcomed and a
 
 #### Using Git
 
-Clone the repo into the directory of your chosing and then ```cd``` into the project's root.
+Clone the repo into the directory of your chosing.
 
 ```bash
 git clone https://github.com/goodguyry/bella.git && cd bella && source setup
