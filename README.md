@@ -5,7 +5,21 @@ A Python script to take the redundancy out of Sass. Contributions welcomed and a
 
 ## Installation
 
-Clone or download this repository. Run ```./setup``` from within the project root to set the files into place. There are three options available:
+#### Using Git
+
+Clone the repo into the directory of your chosing and then ```cd``` into the project's root.
+
+```git clone https://github.com/goodguyry/bella.git && cd bella && source setup```
+
+#### Git-free
+
+Download the files into the directory of your chosing. Once it's done downloading, ```cd``` into the new directory.
+
+```curl -#L https://github.com/goodguyry/bella/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,LICENSE} && source setup```
+
+#### Setup Options
+
+Alternatively, you can run ```./setup``` from within the project root to set the files into place. There are three options available:
 
 <table>
   <tr>
