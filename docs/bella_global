@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-# Global file, served from home directory
-
-# Bella global environments and default settings
-#    bella.config in site's root directory takes precedence
+# https://github.com/goodguyry/bella
+# Global configuration file
+# Served from home directory
+# If not present in the user's home directory,
+#   all configuration setting must be in bella.config
 
 {
 

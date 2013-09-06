@@ -95,6 +95,11 @@ This is a great place to define your environment settings, as those usually won'
 ```python
 # From bella_global
 
+# Global configuration file
+# Served from home directory
+# If not present in the user's home directory,
+#   all configuration setting must be in bella.config
+
 {
 
   'defaults': {
@@ -123,6 +128,10 @@ Project-specific settings to override the global defaults. This file is required
 
 ```python
 # From bella.config
+
+# Local configuration file
+# Required to be served from root directory
+
 {
 
   "paths": {
