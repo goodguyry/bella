@@ -130,7 +130,7 @@ Project-specific settings to override the global defaults. This file is required
 # From bella.config
 
 # Local configuration file
-# Required to be served from root directory
+# Required to be served from the project's root directory
 
 {
 
