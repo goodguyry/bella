@@ -1,13 +1,13 @@
 Bella
 ===================
 
-A Python script to take the redundancy out of Sass. Contributions welcomed and appreciated.
+A Python script to take the redundancy out of executing the ```sass --watch``` command. Contributions welcomed and appreciated.
 
 ## Installation
 
 #### Using Git
 
-Clone the repo into the directory of your chosing.
+Clone the repo into the directory of your chosing and run the setup file (with no options).
 
 ```bash
 git clone https://github.com/goodguyry/bella.git && cd bella && source setup
@@ -15,7 +15,7 @@ git clone https://github.com/goodguyry/bella.git && cd bella && source setup
 
 #### Git-free
 
-Download the files into the directory of your chosing.
+Download the files into the directory of your chosing and run the setup file (with no options).
 
 ```bash
 curl -#L https://github.com/goodguyry/bella/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,LICENSE} && source setup
@@ -40,11 +40,17 @@ Alternatively, you can run ```./setup``` from within the project root to set the
   </tr>
 </table>
 
-Only **docs/bella\_global** and **bella** are copied/synced; **bella\_global** is copied to your home folder a hidden file and **bella** is copied to ~./bin.
+During setup, [.bella_global](https://github.com/goodguyry/bella/blob/master/docs/bella_global) is copied to your home folder and [bella](https://github.com/goodguyry/bella/blob/master/bella) is copied to ~/.bin (the directory is created if it doesn't already exist).
 
 ### Use
 
-Once in **~/.bin**, Bella can be run from the root of your site by typing ```bella```, or with the following optional arguments:
+Once in **~/.bin**, Bella can be run from the root of your site:
+
+```
+bella
+```
+
+The following optional arguments are available to override your configuration files:
 
 ```python
 bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
@@ -55,20 +61,36 @@ bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
 - Using ```environment``` is a quick way to switch away from your default environment
 - ```style``` is one of the Sass style options
 
-Any command line arguments override local settings, which in turn override any global settings. If you've got your configuration files set right, you should only need the options when switching environments.
+If you've got your configuration files set right, you should only need the options when switching environments...
 
-Example: ```bella -e deploy```
+```
+bella -e deploy
+```
 
-Example files included in this repo:
+... or if you want to watch a file other than the default input file...
 
-1. **[bella_global](https://github.com/goodguyry/bella/blob/master/bella_global):**
-This file is copied to your home folder **.bin/** directory during setup, or created manually if you chose not to use the example file. This is a great place to define your environment settings, as those usually won't change from project to project. See [bella_global](https://github.com/goodguyry/bella/blob/master/bella_global) for more.
-2. **[bella.congif](https://github.com/goodguyry/bella/blob/master/bella.config):**
-Project-specific settings to override the global defaults. This file must be in your project root.
+```
+bella -i print
+```
+
+... or if you want to change the name of the processed file.
+
+```
+bella -o main
+```
+
+The settings are applied in this order:
+
+1. bella_global
+2. bella.config
+3. Optional command line arguments
 
 ### Configuration files
 
 The configuration files (bella_global and bella.config) are python dictionary files.
+
+[bella_global](https://github.com/goodguyry/bella/blob/master/docs/bella_global):
+This is a great place to define your environment settings, as those usually won't change from project to project.
 
 ```python
 # From bella_global
@@ -79,7 +101,6 @@ The configuration files (bella_global and bella.config) are python dictionary fi
     'environment': 'develop',
     'precision': 4,
     'watchFile': 'core',
-    'processed-file': 'core',
     'addMinToFilename': True,
     'addMaxToFilename': True
   },
@@ -96,6 +117,9 @@ The configuration files (bella_global and bella.config) are python dictionary fi
 
 }
 ```
+
+[bella.config](https://github.com/goodguyry/bella/blob/master/bella.config):
+Project-specific settings to override the global defaults. This file is required and must be in your project root.
 
 ```python
 # From bella.config
@@ -115,11 +139,11 @@ The configuration files (bella_global and bella.config) are python dictionary fi
 
 ```environment``` is the default environment; the environment can be either _develop_ or _deploy_.
 
-```watchFile``` is the file you want Sass to watch; ```processed-file``` is the filename you want Sass to give the processed (CSS) file. If no _processed-file_ is set, the processed file with be named that same as the watchFile.
+```watchFile``` is the file you want Sass to watch; the processed (output) file will be named the same as the watchFile unless overridden by the ```-o``` command line option.
 
-```addMinToFilename``` and ```addMaxToFilename``` will add _min_ or _max_ (respectively) to the processed CSS file's name; _max_ when not compressed, _min_ when compressed.
+```addMinToFilename``` and ```addMaxToFilename``` will append _min_ or _max_ (respectively) to the processed CSS file's name; _max_ when not compressed, _min_ when compressed (e.g, default.min.css).
 
-```paths``` are the paths to the Sass and CSS files.
+```paths``` are the relative paths (from the root) to the Sass and CSS files.
 
 **Sass-specific settings** ([from the Sass reference](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html))
 
@@ -147,7 +171,7 @@ This was originally written as a Bash script, to get aquainted with Bash; this w
 
 #### Why not Compass or [your favorite Sass framework/application]?
 
-I just wanted a bare-bones, dead simple way of doing it. I definitely understand that this isn't for everyone. Frankly, it's for me, but you're free to use it if you find it useful.
+I just wanted a bare-bones, dead simple way of doing it. I definitely understand this isn't for everyone. Frankly, it's for me, but you're free to use it if you find it useful.
 
 #### Who is Bella?
 
