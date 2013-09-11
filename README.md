@@ -85,6 +85,10 @@ The settings are applied in this order:
 2. bella.config
 3. Optional command line arguments
 
+**Screenshot** *(based on the configuration in the following section):*
+
+![](http://i.imgur.com/9b5vEuC.png)
+
 ### Configuration files
 
 The configuration files (bella_global and bella.config) are python dictionary files.
