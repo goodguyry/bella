@@ -53,13 +53,27 @@ bella
 The following optional arguments are available to override your configuration files:
 
 ```python
-bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
+bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
 ```
 
-- ```inputfile``` is the file you want Sass to watch.
-- ```outputfile``` is the filename you want Sass to give the processed (CSS) file.
-- Using ```environment``` is a quick way to switch away from your default environment
-- ```style``` is one of the Sass style options
+<table>
+  <tr>
+    <td><code>-w</code>, <code>--watchFile</code></td>
+    <td>The file you want Sass to watch</td>
+  </tr>
+  <tr>
+    <td><code>-p</code>, <code>--processedFile</code></td>
+    <td>The filename you want Sass to give the processed (CSS) file</td>
+  </tr>
+  <tr>
+    <td><code>-e</code>, <code>--environment</code></td>
+    <td>Switch away from your default environment</td>
+  </tr>
+  <tr>
+    <td><code>-s</code>, <code>--style</code></td>
+    <td>One of the <a href="#sass">Sass style options</a></td>
+  </tr>
+</table>
 
 If you've got your configuration files set right, you should only need the options when switching environments...
 
@@ -70,13 +84,13 @@ bella -e deploy
 ... or if you want to watch a file other than the default input file...
 
 ```
-bella -i print
+bella -w print
 ```
 
 ... or if you want to change the name of the processed file.
 
 ```
-bella -o main
+bella -p main
 ```
 
 The settings are applied in this order:
@@ -158,7 +172,7 @@ Project-specific settings to override the global defaults. This file is required
 
 ```paths``` are the relative paths (from the root) to the Sass and CSS files.
 
-**Sass-specific settings** ([from the Sass reference](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html))
+**<a name="sass"></a>Sass-specific settings** ([from the Sass reference](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html))
 
 ```precision``` sets the number of digits of precision. For example, if this is 3, 3.1415926 will be printed as 3.142.
 

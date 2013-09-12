@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# bella -i <inputfile> -o <outputfile> -e <environment> -s <style>
+# bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
 
 import sys, getopt, subprocess, os
 from subprocess import call
@@ -57,17 +57,17 @@ stored = Bella()
 # Capture commmand line options
 def capture_opts(argv) :
   try:
-    opts, args = getopt.getopt(argv,"hi:o:e:s:",["input=","output=","environment=","style="])
+    opts, args = getopt.getopt(argv,"hw:p:e:s:",["watchFile=","processedFile=","environment=","style="])
   except getopt.GetoptError :
-    print feedback.header + 'bella -i <inputfile> -o <outputfile> -e <environment> -s <style>' + feedback.end
+    print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>' + feedback.end
     sys.exit(2)
   for opt, arg in opts:
     if opt  in ("-h", "--help") :
-      print feedback.header + 'bella -i <inputfile> -o <outputfile> -e <environment> -s <style>' + feedback.end
+      print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>' + feedback.end
       sys.exit()
-    elif opt in ("-i", "--input") :
+    elif opt in ("-w", "--watchFile") :
       opts_dic.update({'watchFile': arg})
-    elif opt in ("-o", "--output") :
+    elif opt in ("-p", "--processedFile") :
       opts_dic.update({'processedFile': arg})
     elif opt in ("-e", "--environment") :
       opts_dic.update({'environment': arg})
