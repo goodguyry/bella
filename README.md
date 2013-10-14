@@ -50,7 +50,7 @@ Once in **~/.bin**, Bella can be run from the root of your site:
 bella
 ```
 
-The following optional arguments are available to override your configuration files:
+The following optional arguments are available to override your [configuration files](https://github.com/goodguyry/bella#configuration-files):
 
 ```python
 bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
@@ -75,7 +75,7 @@ bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
   </tr>
 </table>
 
-If you've got your configuration files set right, you should only need the options when switching environments...
+If you've got your [configuration files](https://github.com/goodguyry/bella#configuration-files) set right, you should only need the options when switching environments...
 
 ```
 bella -e deploy
