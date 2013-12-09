@@ -38,7 +38,6 @@ class Terminal :
 class Bella :
   def __init__(self): 
     self.lineNumbers = False
-    self.environment = 'develop'
     self.options = ''
     self.addMinToFilename = False
     self.addMaxToFilename = False
