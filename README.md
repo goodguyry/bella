@@ -60,11 +60,11 @@ Use -d or --directory to watch an entire directory.
 <table>
   <tr>
     <td><code>-w</code>, <code>--watchFile</code></td>
-    <td>The file you want Sass to watch</td>
+    <td>The file (without extention) you want Sass to watch</td>
   </tr>
   <tr>
     <td><code>-p</code>, <code>--processedFile</code></td>
-    <td>The filename you want Sass to give the processed (CSS) file</td>
+    <td>The filename (without extention) you want Sass to give the processed (CSS) file</td>
   </tr>
   <tr>
     <td><code>-e</code>, <code>--environment</code></td>
@@ -177,7 +177,7 @@ Project-specific settings to override the global defaults. This file is required
 
 ```environment``` is the default environment; the environment can be either _develop_ or _deploy_.
 
-```watchFile``` is the file you want Sass to watch; the processed (output) file will be named the same as the watchFile unless overridden by the ```-o``` command line option.
+```watchFile``` is the file (without extention) you want Sass to watch; the processed (output) file will be named the same as the watchFile unless overridden by the ```-o``` command line option.
 
 ```addMinToFilename``` and ```addMaxToFilename``` will append _min_ or _max_ (respectively) to the processed CSS file's name; _max_ when not compressed, _min_ when compressed (e.g, default.min.css).
 
