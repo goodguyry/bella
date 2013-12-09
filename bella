@@ -42,6 +42,7 @@ class Bella :
     self.options = ''
     self.addMinToFilename = False
     self.addMaxToFilename = False
+    self.directory = False
   def hold(self, **entries): 
     self.__dict__.update(entries)
 
@@ -57,13 +58,13 @@ stored = Bella()
 # Capture commmand line options
 def capture_opts(argv) :
   try:
-    opts, args = getopt.getopt(argv,"hw:p:e:s:",["watchFile=","processedFile=","environment=","style="])
+    opts, args = getopt.getopt(argv,"hw:p:e:s:d",["watchFile=","processedFile=","environment=","style=","directory="])
   except getopt.GetoptError :
-    print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>' + feedback.end
+    print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>\nUse -d or --directory to watch an entire directory.' + feedback.end
     sys.exit(2)
   for opt, arg in opts:
     if opt  in ("-h", "--help") :
-      print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>' + feedback.end
+      print feedback.header + 'bella -w <watchFile> -p <processedFile> -e <environment> -s <style>\nUse -d or --directory to watch an entire directory.' + feedback.end
       sys.exit()
     elif opt in ("-w", "--watchFile") :
       opts_dic.update({'watchFile': arg})
@@ -73,6 +74,8 @@ def capture_opts(argv) :
       opts_dic.update({'environment': arg})
     elif opt in ("-s", "--style") :
       opts_dic.update({'style': arg})
+    elif opt in ("-d", "--directory") :
+      opts_dic.update({'directory': True})
 
 if __name__ == "__main__" :
   capture_opts(sys.argv[1:])
@@ -186,12 +189,30 @@ else :
 if stored.lineNumbers :
   stored.options += ' --line-numbers'
 
-try :
-  # Create the Sass command
-  bella_do = '--watch ' + stored.sassPath + stored.watchFile + ':' + stored.cssPath + stored.processedFile + stored.options
-  print feedback.okay + '\n','sass ' + bella_do + '\n' + feedback.end
-except :
-  feedback.u_error(sys.exc_info()[1])
+def trimChar(oldstr) :
+  try :
+    # Trim the trailing slash from the folder paths
+    newstr = oldstr[:len(oldstr)-1]
+    return newstr
+  except :
+    feedback.u_error(sys.exc_info()[1])
+
+if stored.directory :
+  stored.sassPath = trimChar(stored.sassPath)
+  stored.cssPath = trimChar(stored.cssPath)
+  try :
+    # Create the Sass command, without the watch file, to watch the entire directory
+    bella_do = '--watch ' + stored.sassPath + ':' + stored.cssPath + stored.options
+    print feedback.okay + '\n','sass ' + bella_do + '\n' + feedback.end
+  except :
+    feedback.u_error(sys.exc_info()[1])
+else :  
+  try :
+    # Create the Sass command
+    bella_do = '--watch ' + stored.sassPath + stored.watchFile + ':' + stored.cssPath + stored.processedFile + stored.options
+    print feedback.okay + '\n','sass ' + bella_do + '\n' + feedback.end
+  except :
+    feedback.u_error(sys.exc_info()[1])
 
 # Run Sass
 # Ends when crtl-c is pressed

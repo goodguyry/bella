@@ -54,6 +54,7 @@ The following optional arguments are available to override your [configuration f
 
 ```python
 bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
+Use -d or --directory to watch an entire directory.
 ```
 
 <table>
@@ -73,6 +74,10 @@ bella -w <watchFile> -p <processedFile> -e <environment> -s <style>
     <td><code>-s</code>, <code>--style</code></td>
     <td>One of the <a href="#sass">Sass style options</a></td>
   </tr>
+  <tr>
+    <td><code>-d</code>, <code>--directory</code></td>
+    <td>Tells Bella to watch the directory paths instead of individual files</td>
+  </tr>
 </table>
 
 If you've got your [configuration files](https://github.com/goodguyry/bella#configuration-files) set right, you should only need the options when switching environments...
@@ -87,10 +92,16 @@ bella -e deploy
 bella -w print
 ```
 
-... or if you want to change the name of the processed file.
+... or if you want to change the name of the processed file...
 
 ```
 bella -p main
+```
+
+... or to watch an entire directory.
+
+```
+bella -d
 ```
 
 The settings are applied in this order:
@@ -170,7 +181,7 @@ Project-specific settings to override the global defaults. This file is required
 
 ```addMinToFilename``` and ```addMaxToFilename``` will append _min_ or _max_ (respectively) to the processed CSS file's name; _max_ when not compressed, _min_ when compressed (e.g, default.min.css).
 
-```paths``` are the relative paths (from the root) to the Sass and CSS files.
+```paths``` are the relative paths (from the root) to the Sass and CSS files (with trailing slashes).
 
 **<a name="sass"></a>Sass-specific settings** ([from the Sass reference](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html))
 
